@@ -1,0 +1,32 @@
+---
+# tasks file for Usability
+  - name: install toolchain
+    apt:
+      name: "{{ item }}"
+      install_recommends: no
+    with_items:
+      - tmux
+      - vim
+      - zsh
+      - git
+  - name: Download zsh installer
+    get_url: url=https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh dest=/tmp/zsh-installer.sh
+
+  - name: make +x 
+    file:
+      path: /tmp/zsh-installer.sh
+      mode: ug+x
+
+  - name: Execute the zsh-installer.sh
+    shell: /tmp/zsh-installer.sh
+
+  - name: Remove the zsh-installer.sh
+    file: 
+      path: /tmp/zsh-installer.sh 
+      state: absent
+
+  - name: Set shell to zsh
+    user:
+      name: root
+      shell: /bin/zsh
+      append: yes

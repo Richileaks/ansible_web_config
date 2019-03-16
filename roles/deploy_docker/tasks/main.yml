@@ -1,0 +1,32 @@
+---
+# tasks file for deploy_docker
+
+ - name: Install dependencies
+   apt:
+     name: apt-transport-https
+     install_recommends: no
+ - name: Add Docker-CE key
+   apt_key:
+     id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+     url: https://download.docker.com/linux/ubuntu/gpg
+     state: present
+ - name: Add Docker-CE repo
+   apt_repository:
+     repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+     filename: docker-ce
+     state: present
+ - name: Install Docker-CE
+   apt:
+     name: "{{ item }}"
+     install_recommends: no
+   with_items:
+     - docker-ce
+     - docker-ce-cli
+ - name: Install Docker-Compose
+   copy:
+     src: docker-compose
+     dest: /usr/local/bin/docker-compose
+     mode: u=rwx,go=rx
+     owner: root
+     group: root
+

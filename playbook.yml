@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: no
+  remote_user: root
+  pre_tasks: 
+    - name: install python
+      raw: test -e /usr/bin/python || (which apt && apt update && apt install -y python-simplejson)
+      register: output
+      changed_when: output.stdout != ""
+
+
+- hosts: none
+  remote_user: root
+  roles:
+    - Usability
+
+- hosts: all
+  remote_user: root
+  roles:
+    - deploy_docker
+

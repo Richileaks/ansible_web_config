@@ -1,0 +1,6 @@
+---
+# tasks file for deploy_web
+  - name: generate db.env
+    copy:
+      content: |
+        subkey= {{ lookup('passwordstore', 'server/bla subkey=subkey') }}
