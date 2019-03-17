@@ -9,6 +9,8 @@
       - vim
       - zsh
       - git
+      - tree
+      - htop
   - name: Download zsh installer
     get_url: url=https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh dest=/tmp/zsh-installer.sh
 

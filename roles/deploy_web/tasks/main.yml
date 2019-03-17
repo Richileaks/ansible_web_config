@@ -1,6 +1,53 @@
 ---
 # tasks file for deploy_web
-  - name: generate db.env
+
+  - name: clone web repo
+    git:
+      repo: https://github.com/Richileaks/my_web_server.git
+      dest: /root/web
+      force: true
+  - name: generate mysql.env
     copy:
       content: |
-        subkey= {{ lookup('passwordstore', 'server/bla subkey=subkey') }}
+        MYSQL_ROOT_PASSWORD={{ lookup('passwordstore', 'server/web/mysql') }}
+      dest: /root/web/mysql.env
+      mode: "u=rw,go="
+      owner: "root"
+    no_log: true
+  - name: generate mysql_nextcloud.env
+    copy:
+      content: |
+        MYSQL_DATABASE={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_MYSQL_DATABASE') }}
+        MYSQL_USER={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_MYSQL_USER') }}
+        MYSQL_PASSWORD={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_MYSQL_PASSWORD') }}
+      dest: /root/web/mysql_nextcloud.env
+      mode: "u=rw,go="
+      owner: "root"
+    no_log: true
+  - name: generate nextcloud.env
+    copy:
+      content: |
+        NEXTCLOUD_ADMIN_USER={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_ADMIN_USER') }}
+        NEXTCLOUD_ADMIN_PASSWORD={{ lookup('passwordstore', 'server/web/nextcloud') }}
+        NEXTCLOUD_TRUSTED_DOMAINS={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_LETSENCRYPT_HOST') }}
+        VIRTUAL_HOST={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_VIRTUAL_HOST') }}
+        LETSENCRYPT_HOST={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_LETSENCRYPT_HOST') }}
+        LETSENCRYPT_EMAIL={{ lookup('passwordstore', 'server/web/nextcloud subkey=NEXTCLOUD_LETSENCRYPT_EMAIL') }}
+      dest: /root/web/nextcloud.env
+      mode: "u=rw,go="
+      owner: "root"
+    nolog: true
+    no_log: true
+  - name: create direktorys
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+      - /root/web-docker/nginx/conf.d
+      - /root/web-docker/nginx/vhost.d
+      - /root/web-docker/nginx/certs
+      - /root/web-docker/nginx/html
+      - /root/web-docker/nginx/dhparam
+      - /root/web-docker/mariadb/mysql
+      - /root/web-docker/nextcloud/var_www_html
+      - /root/web-docker/nextcloud/data

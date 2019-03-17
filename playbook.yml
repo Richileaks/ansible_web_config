@@ -18,4 +18,4 @@
   remote_user: root
   roles:
     - deploy_docker
-
+    - deploy_web 
