@@ -9,13 +9,18 @@
       changed_when: output.stdout != ""
 
 
-- hosts: none
+- hosts: all 
   remote_user: root
   roles:
     - Usability
 
-- hosts: all
+- hosts: web 
   remote_user: root
   roles:
     - deploy_docker
     - deploy_web 
+
+- hosts: nas
+  remote_user: root
+  roles:
+
