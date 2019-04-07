@@ -1,0 +1,4 @@
+*.swp
+hosts
+playbook.retry
+
