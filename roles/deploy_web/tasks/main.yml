@@ -38,16 +38,6 @@
       owner: "root"
     nolog: true
     no_log: true
-  - name: generate youtube-dl.env
-    copy:
-      content: |
-        LETSENCRYPT_HOST={{ lookup('passwordstore', 'server/web/youtube-dl subkey=YOUTUBE-DL_LETSENCRYPT_HOST') }}
-        LETSENCRYPT_EMAIL={{ lookup('passwordstore', 'server/web/youtube-dl subkey=YOUTUBE-DL_LETSENCRYPT_EMAIL') }}
-      dest: /root/web/youtube-dl.env
-      mode: "u=rw,go="
-      owner: "root"
-    nolog: true
-    no_log: true
   - name: create direktorys
     file:
       path: "{{ item }}"
@@ -61,4 +51,3 @@
       - /root/web-docker/mariadb/mysql
       - /root/web-docker/nextcloud/var_www_html
       - /root/web-docker/nextcloud/data
-      - /root/web-docker/nextcloud/data/youtube-dl
