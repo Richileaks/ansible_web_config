@@ -13,7 +13,7 @@
   remote_user: root
   roles:
     - Usability
-
+    - deploy_docker
 - hosts: web 
   remote_user: root
   roles:

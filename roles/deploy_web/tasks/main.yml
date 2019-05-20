@@ -36,7 +36,6 @@
       dest: /root/web/nextcloud.env
       mode: "u=rw,go="
       owner: "root"
-    nolog: true
     no_log: true
   - name: create direktorys
     file:

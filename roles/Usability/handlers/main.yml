@@ -1,23 +1,24 @@
 ---
 # handers file for Usability
-- name: Download oh-my-zsh
-  get_url: url=https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh dest=/tmp/zsh-installer.sh
-notify: set +x 
-- name: set +x
-  file:
-    path: /tmp/zsh-installer.sh
-    mode: us+x
-notify: install oh-my-zsh
-- name: install oh-my-zsh
-  shell: /tmp/zsh-installer.sh
-notify: remove installer
-- name: remove installer
-  file:
-    path: /tmp/zsh-installer.sh
-    state: absent
-notify: set shell to zsh
-- name: set shell to zsh
-  user:
-    name: root
-    shell: /bin/zsh
-    append: yes
+ - name: Install oh-my-zsh
+   command: "git clone -c core.autocrlf=input --depth=1 https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh"
+   notify: write zshrc
+
+ - name: write zshrc
+   copy:
+     src: .zshrc 
+     dest: ~/.zshrc
+     mode: 'u=rw,go=r'
+   notify: copy theme
+
+ - name: copy theme
+   copy:
+     src: oxide.zsh-theme
+     dest: ~/.oh-my-zsh/themes/oxide.zsh-theme
+   notify: set shell to zsh
+
+ - name: set shell to zsh
+   user:
+     name: root
+     shell: /bin/zsh
+     append: yes

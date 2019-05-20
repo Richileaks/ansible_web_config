@@ -14,4 +14,4 @@
     apt:
       name: zsh
       install_recommends: no
-    notify: Download oh-my-zsh
+    notify: Install oh-my-zsh
